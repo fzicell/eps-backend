@@ -1,9 +1,9 @@
 #Based on Ubuntu 14.04
 FROM ubuntu:14.04
 
-MAINTAINER zoltan.ferenczik@icell.hu
+MAINTAINER zoltan.ferenczik@icellmobilsoft.hu
 
-LABEL Description="This image is used to start RestAPI for testing and demonstration purposes" Vendor="iCell Mobilsoft" Version="1.0"
+LABEL Description="This image is created for testing and demonstration purposes" Vendor="iCell Mobilsoft" Version="1.0"
 
 ENV DEBIAN_FRONTEND noninteractive
 
