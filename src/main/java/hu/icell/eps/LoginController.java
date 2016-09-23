@@ -1,36 +1,38 @@
 package hu.icell.eps;
 
-import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.icell.eps.dao.CustomerDAO;
+import hu.icell.eps.model.Customer;
 
 @RestController
 public class LoginController {
+	
+	@Autowired
+	CustomerDAO customerDAO;
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)    
-    public @ResponseBody String login(@RequestBody String json) {
-    	
-//    	if ( du.getUsername().equals(jo.getString("username")) && du.getPassword().equals(jo.getString("password")) ) {
-//    		return du.toString();
-//    	} else {
-//    		return null;
-//    	}
-    	
-    	JSONObject obj = new JSONObject(json);
-    	if ( obj.getString("username").equals("validuser") && obj.getString("password").equals("validpass") ) {
-        	obj.remove("password");
-    		obj.put("userId", "33");   		
-    	} else {
-    		obj.remove("username");
-    		obj.remove("password");
-    		obj.put("errorMessage", "Please send a valid user credentials.");
-    	}
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")    
+    public @ResponseBody Customer login(@RequestBody Customer customer) {
+		//customerDAO.save(new Customer("Zoltan", "Ferenczik", "zferenczik","valamipass",34));		
+		
+		try {
+			Customer existingCustomer = customerDAO.findByUsername(customer.getUsername());
 
-    	return obj.toString(); 	    	
-
+			if(existingCustomer.getPassword() == customer.getPassword()){
+				existingCustomer.setPassword(null);
+				return existingCustomer;			
+			}			
+		} catch (NullPointerException e) {
+			return null;
+		} finally {
+			return null;
+		}
     }
+    
 }
