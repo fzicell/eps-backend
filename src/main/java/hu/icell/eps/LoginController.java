@@ -19,6 +19,7 @@ public class LoginController {
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")    
     public @ResponseBody Customer login(@RequestBody Customer customer) {
+		
 		//customerDAO.save(new Customer("Zoltan", "Ferenczik", "zferenczik","valamipass",34));		
 		
 		try {
