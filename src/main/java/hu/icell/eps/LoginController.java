@@ -1,5 +1,7 @@
 package hu.icell.eps;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,24 +18,29 @@ public class LoginController {
 	@Autowired
 	CustomerDAO customerDAO;
 
-	@SuppressWarnings("finally")
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")    
-    public @ResponseBody Customer login(@RequestBody Customer customer) {
-		
-		//customerDAO.save(new Customer("Zoltan", "Ferenczik", "zferenczik","valamipass",34));		
+    public @ResponseBody Customer login(@RequestBody Customer customer, HttpServletResponse response) {
+		//customerDAO.save(new Customer("Zoltan", "Ferenczik", "zferenczik","valamipass",500000,34));
+
+		Customer existingCustomer = new Customer();
+		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 		
 		try {
-			Customer existingCustomer = customerDAO.findByUsername(customer.getUsername());
+			existingCustomer = customerDAO.findByUsername(customer.getUsername());
 
-			if(existingCustomer.getPassword() == customer.getPassword()){
+			if(existingCustomer.getPassword().equals(customer.getPassword())){
 				existingCustomer.setPassword(null);
-				return existingCustomer;			
-			}			
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				existingCustomer = null;
+			}
+			
 		} catch (NullPointerException e) {
-			return null;
-		} finally {
-			return null;
+			existingCustomer = null;
 		}
+		
+		return existingCustomer;
+		
     }
     
 }

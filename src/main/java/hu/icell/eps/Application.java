@@ -37,6 +37,7 @@ public class Application {
 				"jdbc:mysql://172.18.0.3:3306/mysql?verifyServerCertificate=false&useSSL=false&requireSSL=false");
 		dataSource.setUsername("root");
 		dataSource.setPassword("mysqlpass");
+		
 		return dataSource;
 	}
 	

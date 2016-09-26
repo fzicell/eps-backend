@@ -1,27 +1,50 @@
 package hu.icell.eps.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@Entity
+@Table(name="vehicle")
+@JsonInclude(Include.NON_NULL)
 public class Vehicle {
 
-    private Integer vehicleId;
-    private Integer customerId;
-	private String plateNumber;
+	// ------------------------
+	// PRIVATE FIELDS
+	// ------------------------
 
+	@Id	  
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Integer vehicleId;
+    
+	@NotNull
+	private Integer customerId;
+	
+	@NotNull
+	private String plateNumber;
+		    
+	// ------------------------
+	// PUBLIC METHODS
+	// ------------------------
+	    
 	public Vehicle(){
 		
 	}
-		
-	public Vehicle(int vehicleId, int customerId, String plateNumber) {
-    	setVehicleId(vehicleId);
-    	setCustomerId(customerId);
-    	setPlateNumber(plateNumber);
-	}
-    
-    public Vehicle(int customerId, String plateNumber) {
-    	setCustomerId(customerId);
-    	setPlateNumber(plateNumber);
+
+	public Vehicle(int customerId, String plateNumber) {
+    	this.customerId=customerId;
+    	this.plateNumber=plateNumber;
 	}
 
-	public Integer getVehicleId() {
+    // Getter and setter methods
+
+    public Integer getVehicleId() {
 		return vehicleId;
 	}
 	public Integer getCustomerId() {

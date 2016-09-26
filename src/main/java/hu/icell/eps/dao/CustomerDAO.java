@@ -9,8 +9,7 @@ import hu.icell.eps.model.Customer;
 @Transactional
 public interface CustomerDAO extends CrudRepository<Customer, Integer> {
 
-	public Customer findByCustId(Integer custId);
+	public Customer findByCustomerId(Integer customerId);
 	public Customer findByUsername(String username);
-	public Customer findByUsernameAndPassword(String username, String password);
 	
 }

@@ -24,7 +24,7 @@ public class Customer
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@JsonProperty(value="userId")
-	private Integer custId;
+	private Integer customerId;
 
 	@NotNull
     private String firstName;
@@ -37,8 +37,11 @@ public class Customer
 
     @NotNull
     private String password;
-
+    
     @NotNull
+    private Integer balance;
+
+	@NotNull
     private Integer age;
 
     
@@ -51,13 +54,12 @@ public class Customer
         
     // Getter and setter methods
 
-    public Customer(String firstName, String LastName, String username, String password, Integer age) {
-    	setFirstName(firstName);
-    	setLastName(LastName);
-    	setUsername(username);
-    	setPassword(password);
-    	setAge(age);
-    	
+    public Customer(String firstName, String lastName, String username, String password, Integer age) {
+    	this.firstName=firstName;
+    	this.lastName=lastName;
+    	this.username=username;
+    	this.password=password;
+    	this.age=age;    	
 	}
 
 	public String getFirstName() {
@@ -74,25 +76,24 @@ public class Customer
 	
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}	
+	
+	public Integer getCustomerId() {
+		return customerId;
 	}
 	
-	
-	public Integer getCustId() {
-		return custId;
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
 	}
-	
-	public void setCustId(Integer custId) {
-		this.custId = custId;
+		
+	public String getUsername() {
+		return username;
 	}
-	
-	public Integer getAge() {
-		return age;
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
-	
-	public void setAge(Integer age) {
-		this.age = age;
-	}
-	
+
 	public String getPassword() {
 		return password;
 	}
@@ -100,13 +101,21 @@ public class Customer
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	public String getUsername() {
-		return username;
+	
+    public Integer getBalance() {
+		return balance;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setBalance(Integer balance) {
+		this.balance = balance;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+	
+	public void setAge(Integer age) {
+		this.age = age;
 	}
 
 }
