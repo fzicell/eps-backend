@@ -51,8 +51,6 @@ public class Customer
     
     public Customer() {
 	}    	
-        
-    // Getter and setter methods
 
     public Customer(String firstName, String lastName, String username, String password, Integer age) {
     	this.firstName=firstName;
@@ -62,7 +60,9 @@ public class Customer
     	this.age=age;    	
 	}
 
-	public String getFirstName() {
+    // Getter and setter methods
+
+    public String getFirstName() {
 		return firstName;
 	}
 	

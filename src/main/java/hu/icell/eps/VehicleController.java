@@ -24,7 +24,7 @@ public class VehicleController {
     public @ResponseBody Vehicle myVehicles(@PathVariable("userId") Integer customerId, HttpServletResponse response) {
 		
 		Vehicle myVehicle = new Vehicle();
-		response.setStatus(HttpServletResponse.SC_NO_CONTENT);				
+		response.setStatus(HttpServletResponse.SC_FORBIDDEN);				
 		
 		try {
 			myVehicle = vehicleDAO.findByCustomerId(customerId);
@@ -47,7 +47,7 @@ public class VehicleController {
 
 		Vehicle newVehicle = new Vehicle();
 		requestedVehicle.setCustomerId(customerId);
-		response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		
 		try {			
 			newVehicle = vehicleDAO.save(requestedVehicle);

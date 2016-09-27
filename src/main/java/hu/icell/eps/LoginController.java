@@ -23,7 +23,7 @@ public class LoginController {
 		//customerDAO.save(new Customer("Zoltan", "Ferenczik", "zferenczik","valamipass",500000,34));
 
 		Customer existingCustomer = new Customer();
-		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		
 		try {
 			existingCustomer = customerDAO.findByUsername(customer.getUsername());
