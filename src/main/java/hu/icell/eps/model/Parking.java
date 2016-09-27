@@ -2,7 +2,6 @@ package hu.icell.eps.model;
 
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,12 +12,9 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 @Entity
 @Table(name = "parkingorder")
-@JsonInclude(Include.NON_NULL)
+//@JsonInclude(Include.NON_NULL)
 public class Parking {
 	
 //------------------------
@@ -35,13 +31,10 @@ public class Parking {
 	@NotNull
 	private Integer vehicleId;
 	
-	@NotNull
 	@LastModifiedDate
 	private Timestamp updatedAt;
 	
-	@NotNull
 	@CreatedDate
-	@Column(insertable = true, updatable = false)
 	private Timestamp startedAt;
 	
 	private Timestamp finishedAt;

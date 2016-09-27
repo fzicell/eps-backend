@@ -1,5 +1,7 @@
 package hu.icell.eps;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,9 @@ public class VehicleController {
 	VehicleDAO vehicleDAO;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody Vehicle myVehicles(@PathVariable("userId") Integer customerId, HttpServletResponse response) {
+    public @ResponseBody List<Vehicle> myVehicles(@PathVariable("userId") Integer customerId, HttpServletResponse response) {
 		
-		Vehicle myVehicle = new Vehicle();
+		List<Vehicle> myVehicle;
 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);				
 		
 		try {
