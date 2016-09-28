@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "vehicle")
@@ -20,6 +21,7 @@ public class Vehicle {
 	private Integer vehicleId;
 
 	@NotNull
+	@JsonProperty(value = "userId")
 	private Integer customerId;
 
 	@NotNull

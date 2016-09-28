@@ -12,6 +12,8 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "parkingorder")
 public class Parking {
@@ -21,6 +23,7 @@ public class Parking {
 	private Integer parkingId;
 
 	@NotNull
+	@JsonProperty(value = "userId")
 	private Integer customerId;
 
 	@NotNull
