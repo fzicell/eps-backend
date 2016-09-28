@@ -4,8 +4,6 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,8 +20,6 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 @SpringBootApplication
 public class Application {
 
-	public static final Logger log = LoggerFactory.getLogger(Application.class);
-
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 
@@ -37,26 +33,25 @@ public class Application {
 				"jdbc:mysql://172.18.0.3:3306/mysql?verifyServerCertificate=false&useSSL=false&requireSSL=false");
 		dataSource.setUsername("root");
 		dataSource.setPassword("mysqlpass");
-		
+
 		return dataSource;
 	}
-	
+
 	@Bean
-	   public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-	     LocalContainerEntityManagerFactoryBean entityManagerFactory =
-	         new LocalContainerEntityManagerFactoryBean();      
-	     entityManagerFactory.setDataSource(getDataSource());      
-	     entityManagerFactory.setPackagesToScan("hu.icell.eps");
-	     
-	     HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-	     entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
-	     Properties additionalProperties = new Properties();
-	     additionalProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-	     additionalProperties.put("hibernate.show_sql", "true");
-	     additionalProperties.put("hibernate.hbm2ddl.auto", "none");
-	     entityManagerFactory.setJpaProperties(additionalProperties);
-	     
-	     return entityManagerFactory;
-	   }
-		
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
+		entityManagerFactory.setDataSource(getDataSource());
+		entityManagerFactory.setPackagesToScan("hu.icell.eps");
+
+		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
+		Properties additionalProperties = new Properties();
+		additionalProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+		additionalProperties.put("hibernate.show_sql", "true");
+		additionalProperties.put("hibernate.hbm2ddl.auto", "none");
+		entityManagerFactory.setJpaProperties(additionalProperties);
+
+		return entityManagerFactory;
+	}
+
 }

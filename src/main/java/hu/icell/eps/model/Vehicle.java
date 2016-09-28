@@ -11,45 +11,37 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Entity
-@Table(name="vehicle")
+@Table(name = "vehicle")
 @JsonInclude(Include.NON_NULL)
 public class Vehicle {
 
-	// ------------------------
-	// PRIVATE FIELDS
-	// ------------------------
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer vehicleId;
 
-	@Id	  
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Integer vehicleId;
-    
 	@NotNull
 	private Integer customerId;
-	
+
 	@NotNull
 	private String plateNumber;
-		    
-	// ------------------------
-	// PUBLIC METHODS
-	// ------------------------
-	    
-	public Vehicle(){
-		
+
+	public Vehicle() {
+
 	}
 
 	public Vehicle(int customerId, String plateNumber) {
-    	this.customerId=customerId;
-    	this.plateNumber=plateNumber;
+		this.customerId = customerId;
+		this.plateNumber = plateNumber;
 	}
 
-    // Getter and setter methods
-
-    public Integer getVehicleId() {
+	public Integer getVehicleId() {
 		return vehicleId;
 	}
+
 	public Integer getCustomerId() {
 		return customerId;
 	}
+
 	public String getPlateNumber() {
 		return plateNumber;
 	}
@@ -57,9 +49,11 @@ public class Vehicle {
 	public void setVehicleId(Integer vehicleId) {
 		this.vehicleId = vehicleId;
 	}
+
 	public void setCustomerId(Integer customerId) {
 		this.customerId = customerId;
 	}
+
 	public void setPlateNumber(String plateNumber) {
 		this.plateNumber = plateNumber;
 	}

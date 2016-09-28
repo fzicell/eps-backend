@@ -14,33 +14,32 @@ import hu.icell.eps.model.Customer;
 
 @RestController
 public class LoginController {
-	
+
 	@Autowired
 	CustomerDAO customerDAO;
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")    
-    public @ResponseBody Customer login(@RequestBody Customer customer, HttpServletResponse response) {
-		//customerDAO.save(new Customer("Zoltan", "Ferenczik", "zferenczik","valamipass",500000,34));
+	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Customer login(@RequestBody Customer customer, HttpServletResponse response) {
 
-		Customer existingCustomer = new Customer();
+		Customer existingCustomer;
 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-		
+
 		try {
 			existingCustomer = customerDAO.findByUsername(customer.getUsername());
 
-			if(existingCustomer.getPassword().equals(customer.getPassword())){
+			if (existingCustomer.getPassword().equals(customer.getPassword())) {
 				existingCustomer.setPassword(null);
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				existingCustomer = null;
 			}
-			
+
 		} catch (NullPointerException e) {
 			existingCustomer = null;
 		}
-		
+
 		return existingCustomer;
-		
-    }
-    
+
+	}
+
 }
