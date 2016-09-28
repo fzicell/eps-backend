@@ -15,40 +15,88 @@
  */
 package hu.icell.eps;
 
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import hu.icell.eps.dao.CustomerDAO;
+import hu.icell.eps.dao.VehicleDAO;
+import hu.icell.eps.model.Customer;
+
+@WebAppConfiguration
+@ContextConfiguration(classes = { CustomerDAOTestConfiguration.class, VehicleDAOTestConfiguration.class,
+		LoginController.class })
+@ActiveProfiles("test")
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(LoginController.class)
 public class LoginControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
+	@Autowired
+	private CustomerDAO customerDao;
+	@Autowired
+	private VehicleDAO vehicleDao;
 
-    @Test
-    public void noParamGreetingShouldReturnDefaultMessage() throws Exception {
+	private Customer customer = new Customer("Lajos", "Szkajvolker", "szkaj", "jelszo", 18);
 
-        this.mockMvc.perform(get("/user/33/vehicles")).andDo(print()).andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").value("Hello, World!"));
-    }
+	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
+			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
-    @Test
-    public void paramGreetingShouldReturnTailoredMessage() throws Exception {
+	/*@Test
+	public void expectResponseStringTest() throws Exception {
+		mockMvc.perform(get("/login2")).andExpect(status().isOk()).andExpect(content().string("lajos"));
 
-        this.mockMvc.perform(get("/user/33/vehicles").param("name", "Spring Community"))
-                .andDo(print()).andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").value("Hello, Spring Community!"));
-    }
+	}*/
+
+	@Test
+	public void bodyWithInvalidPayload() throws Exception {
+
+		mockMvc.perform(post("/login/").contentType(contentType).content(json(customer)))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
+	public void bodyWithValidPayloadButInvalidPassword() throws Exception {
+		// Expecting NoContent cause invalid password
+		Mockito.when(customerDao.findByUsername("szkaj"))
+				.thenReturn(new Customer("Lajos", "Szkajvolker", "szkaj", "jelszo12", 18));
+
+		mockMvc.perform(post("/login/").contentType(contentType).content(json(customer)))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
+	public void bodyWithValidPayload() throws Exception {
+		// Expecting customer with same parameters as posted
+		Mockito.when(customerDao.findByUsername("szkaj")).thenReturn(customer);
+
+		mockMvc.perform(post("/login/").contentType(contentType).content(json(customer))).andExpect(status().isOk());
+	}
+
+	protected String json(Object o) throws IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		return objectMapper.writeValueAsString(o);
+	}
 
 }
