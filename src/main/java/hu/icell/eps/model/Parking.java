@@ -12,46 +12,38 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "parkingorder")
-//@JsonInclude(Include.NON_NULL)
 public class Parking {
-	
-//------------------------
-// PRIVATE FIELDS
-// ------------------------
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer parkingId;
-	
+
 	@NotNull
+	@JsonProperty(value = "userId")
 	private Integer customerId;
-	
+
 	@NotNull
 	private Integer vehicleId;
-	
+
 	@LastModifiedDate
 	private Timestamp updatedAt;
-	
+
 	@CreatedDate
 	private Timestamp startedAt;
-	
+
 	private Timestamp finishedAt;
-	
-// ------------------------
-// PUBLIC METHODS
-// ------------------------
-	
-	public Parking(){		
+
+	public Parking() {
 	}
-	
-	public Parking(Integer customerId, Integer vehicleId){
+
+	public Parking(Integer customerId, Integer vehicleId) {
 		this.customerId = customerId;
-		this.vehicleId = vehicleId;		
+		this.vehicleId = vehicleId;
 	}
-	
-    // Getter and setter methods
 
 	public Integer getParkingId() {
 		return parkingId;
@@ -99,6 +91,6 @@ public class Parking {
 
 	public void setFinishedAt(Timestamp finishedAt) {
 		this.finishedAt = finishedAt;
-	}	
+	}
 
 }

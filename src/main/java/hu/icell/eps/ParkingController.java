@@ -19,92 +19,87 @@ import hu.icell.eps.model.Vehicle;
 
 @RestController
 public class ParkingController {
-	
+
 	@Autowired
-	ParkingDAO parkingDAO ;
-	
+	ParkingDAO parkingDAO;
+
 	@Autowired
 	VehicleDAO vehicleDAO;
-	
-    @RequestMapping(value = "/user/{userId}/current_parkings", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody List<Parking> getMyParkings(@PathVariable("userId") Integer customerId, HttpServletResponse response) {
 
-    	List<Parking> myParkings;
+	@RequestMapping(value = "/user/{userId}/current_parkings", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<Parking> getMyParkings(@PathVariable("userId") Integer customerId,
+			HttpServletResponse response) {
+
+		List<Parking> myParkings = null;
 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-		
+
 		try {
-//			myParkings = parkingDAO.findByCustomerId(customerId);
 			myParkings = parkingDAO.listActiveParkings(customerId);
-			
-			if(myParkings.equals(null)){
-				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-				return myParkings;
-			}
-			
-			response.setStatus(HttpServletResponse.SC_OK);
-			
+			response.setStatus(myParkings == null ? HttpServletResponse.SC_NO_CONTENT : HttpServletResponse.SC_OK);
 		} catch (Exception e) {
 			myParkings = null;
 		}
 
-        return myParkings;
-        
-    }
+		return myParkings;
+
+	}
 
 	@RequestMapping(value = "/user/{userId}/start_parking", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public @ResponseBody Parking startParking(@PathVariable(value="userId") Integer customerId, @RequestBody Vehicle requestBody, HttpServletResponse response) {
+	public @ResponseBody Parking startParking(@PathVariable(value = "userId") Integer customerId,
+			@RequestBody Vehicle requestBody, HttpServletResponse response) {
 
-		Parking responseBody = null;
-		
+		Parking responseBody;
+
 		try {
 			Vehicle myVehicle = vehicleDAO.findByCustomerIdAndPlateNumber(customerId, requestBody.getPlateNumber());
-			
+
 			Parking startedParking = parkingDAO.save(new Parking(myVehicle.getCustomerId(), myVehicle.getVehicleId()));
-			
+
 			responseBody = parkingDAO.findOne(startedParking.getParkingId());
-			
-			if(responseBody.equals(null)){
+
+			if (responseBody == null) {
 				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 				return responseBody;
 			}
-			
+
 			response.setStatus(HttpServletResponse.SC_OK);
-			
+
 		} catch (Exception e) {
 			responseBody = null;
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		}
 
-		return responseBody;			
+		return responseBody;
 
-    }
+	}
 
-    @RequestMapping(value = "/user/{userId}/stop_parking", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public @ResponseBody Parking stopParking(@PathVariable(value="userId") Integer customerId, @RequestBody Parking requestBody, HttpServletResponse response) {
+	@RequestMapping(value = "/user/{userId}/stop_parking", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody Parking stopParking(@PathVariable(value = "userId") Integer customerId,
+			@RequestBody Parking requestBody, HttpServletResponse response) {
 
-		Parking responseBody = null;
+		Parking responseBody;
 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-		
+
 		try {
 			Parking authorized = parkingDAO.findByParkingId(requestBody.getParkingId());
-			
-			if(!authorized.getCustomerId().equals(customerId))
-				return responseBody;
-			
-			parkingDAO.stopParking(requestBody.getParkingId());			
+
+			if (!authorized.getCustomerId().equals(customerId)) {
+				return null;
+			}
+
+			parkingDAO.stopParking(requestBody.getParkingId());
 			responseBody = parkingDAO.findByParkingId(requestBody.getParkingId());
 
-			if(responseBody.equals(null)){
+			if (responseBody.equals(null)) {
 				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 				return responseBody;
 			}
 			response.setStatus(HttpServletResponse.SC_OK);
-			
+
 		} catch (Exception e) {
 			responseBody = null;
 		}
 
-        return responseBody;
-    }
+		return responseBody;
+	}
 }
-    

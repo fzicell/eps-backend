@@ -23,47 +23,49 @@ public class VehicleController {
 	VehicleDAO vehicleDAO;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody List<Vehicle> myVehicles(@PathVariable("userId") Integer customerId, HttpServletResponse response) {
-		
+	public @ResponseBody List<Vehicle> myVehicles(@PathVariable("userId") Integer customerId,
+			HttpServletResponse response) {
+
 		List<Vehicle> myVehicle;
-		response.setStatus(HttpServletResponse.SC_FORBIDDEN);				
-		
+		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+
 		try {
 			myVehicle = vehicleDAO.findByCustomerId(customerId);
-						
-			if (myVehicle.equals(null))
-				return myVehicle;
-			
+
+			if (myVehicle == null)
+				return null;
+
 			response.setStatus(HttpServletResponse.SC_OK);
 
 		} catch (Exception e) {
 			myVehicle = null;
-		} 
-		
-		return myVehicle;			
-		
-    }
-    
-	@RequestMapping(method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public @ResponseBody Vehicle addVehicle(@RequestBody Vehicle requestedVehicle, @PathVariable("userId") Integer customerId, HttpServletResponse response) {
+		}
 
-		Vehicle newVehicle = new Vehicle();
+		return myVehicle;
+
+	}
+
+	@RequestMapping(method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public @ResponseBody Vehicle addVehicle(@RequestBody Vehicle requestedVehicle,
+			@PathVariable("userId") Integer customerId, HttpServletResponse response) {
+
+		Vehicle newVehicle;
 		requestedVehicle.setCustomerId(customerId);
 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-		
-		try {			
+
+		try {
 			newVehicle = vehicleDAO.save(requestedVehicle);
-			
-			if (newVehicle.equals(null))
-				return newVehicle;			
-			
+
+			if (newVehicle == null)
+				return null;
+
 			response.setStatus(HttpServletResponse.SC_OK);
-			
+
 		} catch (Exception e) {
 			newVehicle = null;
 		}
-		
+
 		return newVehicle;
-    	
-    }
+
+	}
 }
