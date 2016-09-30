@@ -91,12 +91,15 @@ public class VehicleControllerTest {
 		
 		mockMvc.perform(post("/user/1/vehicles").contentType(contentType).content(json(vehicle)))
 				.andExpect(status().isOk());
+		
+		Mockito.verify(vehicleDao).save(any(Vehicle.class));
 	}
 
 	 @Test
 	public void addEmptyVehicle() throws Exception, Exception {
-		Vehicle vehicle = new Vehicle();
-		mockMvc.perform(post("/user/1/vehicles").contentType(contentType).content(json(vehicle)))
+		Vehicle vehicleASD = new Vehicle();
+		Mockito.when(vehicleDao.save(any(Vehicle.class))).thenReturn(null);
+		mockMvc.perform(post("/user/1/vehicles").contentType(contentType).content(json(vehicleASD)))
 				.andExpect(status().isForbidden());
 	}
 
