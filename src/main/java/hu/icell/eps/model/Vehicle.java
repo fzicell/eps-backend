@@ -21,7 +21,7 @@ public class Vehicle {
 	private Integer vehicleId;
 
 	@NotNull
-	//@JsonProperty(value = "userId")
+	@JsonProperty(value = "userId")
 	private Integer customerId;
 
 	@NotNull
